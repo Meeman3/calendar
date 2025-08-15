@@ -1,8 +1,9 @@
 from tkinter import *
 from tkinter import ttk
+import functions
 
 
-def start_screen(root, screen_manager):
+def start_screen(root, screen_manager, date=functions.today):
 
 
 

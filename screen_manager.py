@@ -1,6 +1,8 @@
 from screens.checklist_screen import to_daylist
 from screens.start_screen import start_screen
 from screens.notes_screen import to_notes
+from screens.add_to_checklist import add_list
+from screens.add_notes_screen import add_notes
 
 class Screen_Manager:
     def __init__(self, root):
@@ -22,6 +24,11 @@ class Screen_Manager:
             to_notes(self.root, self)
         if screen_name == "checklist":
             to_daylist(self.root, self)
+        if screen_name == "add_list":
+            add_list(self.root, self)
+        if screen_name == "add_notes":
+            add_notes(self.root, self)
+
     
         #goes back to previous screen and removes current from history
     def go_back(self, current_frame):
