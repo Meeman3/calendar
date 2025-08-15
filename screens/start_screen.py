@@ -25,7 +25,7 @@ def start_screen(root, screen_manager):
                                 command=lambda: screen_manager.change_screen("checklist", start_frm))
     checklist_btn.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-    if screen_manager.screen_hist != ["start"]:
+    if len(screen_manager.screen_hist) != 1:
 
         back_btn = ttk.Button(start_frm, text="Back", command= lambda: screen_manager.go_back(start_frm))
         back_btn.place(relx=0.9, rely=0.9)

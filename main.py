@@ -1,9 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from variables import *
-from screens.notes_screen import to_notes
-from screens.checklist_screen import to_daylist
-from screens.start_screen import start_screen
+
 from screen_manager import Screen_Manager
 
 def main():
@@ -17,7 +15,7 @@ def main():
 
     screen_manager = Screen_Manager(root)
     
-    start_screen(root, screen_manager) #runs my start screen thats in start_screen.py
+    screen_manager.change_screen("start") #runs my start screen thats in start_screen.py
 
 
     #displays everything and responds to input until terminated
