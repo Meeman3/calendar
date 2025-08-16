@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import functions
 from dictionaries.notes_dict import notes_dict
+from tkinter import scrolledtext 
 
 def add_notes(root, screen_manager):
 
@@ -28,8 +29,13 @@ def add_notes(root, screen_manager):
             new_notes_dict.update(note_dict)
             nd.write(f"notes_dict = {notes_dict}")
 
+    def add_new_note(title_text_box, note_text_box):
+        get_new_note(title_text_box, note_text_box)
+        screen_manager.go_back(add_notes_frm)
+
+
     #new note input
-    new_note = Text(add_notes_frm, width= 100, height = 20)
+    new_note = scrolledtext.ScrolledText(add_notes_frm, width= 100, height = 20)
     new_note.place(relx=0.7, rely=0.5, anchor=CENTER)
     
 
@@ -47,7 +53,7 @@ def add_notes(root, screen_manager):
     #confirms note add
     add_btn = ttk.Button(add_notes_frm, 
                          text="Add note",
-                          command=lambda : get_new_note(pick_title, new_note))
+                          command=lambda : add_new_note(pick_title, new_note))
     add_btn.place(relx=0.5, rely= 0.7, anchor=CENTER)
 
 

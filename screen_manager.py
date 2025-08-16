@@ -3,6 +3,7 @@ from screens.start_screen import start_screen
 from screens.notes_screen import to_notes
 from screens.add_to_checklist import add_list
 from screens.add_notes_screen import add_notes
+from screens.read_notes_screen import read_notes
 import functions
 
 class Screen_Manager:
@@ -12,7 +13,7 @@ class Screen_Manager:
         self.screen_hist = [["start", functions.today]]
 
         #changes screen from one to another, adds former screen to history if not using back func
-    def change_screen(self, screen_name, current_frame=None, back=False, date=functions.today):
+    def change_screen(self, screen_name, current_frame=None, back=False, date=functions.today, title =""):
         if current_frame:
             if not back:
                 self.screen_hist.append([screen_name, date])
@@ -29,6 +30,8 @@ class Screen_Manager:
             add_list(self.root, self)
         if screen_name == "add_notes":
             add_notes(self.root, self)
+        if screen_name == "read_notes":
+            read_notes(self.root, self, title)
 
     
         #goes back to previous screen and removes current from history
