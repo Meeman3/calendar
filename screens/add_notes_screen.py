@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import functions
+from dictionaries.notes_dict import notes_dict
 
 def add_notes(root, screen_manager):
 
@@ -10,24 +11,43 @@ def add_notes(root, screen_manager):
     add_notes_msg = ttk.Label(add_notes_frm, text="What note would you like to add?")
     add_notes_msg.place(relx=0.5, rely=0.25, anchor=CENTER) #centres in frm
 
+    #shows where to input note
     input_msg = ttk.Label(add_notes_frm, text="Input text here:")
     input_msg.place(relx=0.4, rely=0.35, anchor=CENTER)
 
+
+    
+    def get_new_note(title_text_box, note_text_box):
+        note_title = functions.get_text(title_text_box)
+        note_text = functions.get_text(note_text_box)
+        time = functions.today_time
+        note_with_time = {note_text: time}
+        note_dict = {note_title: note_with_time}
+        with open("dictionaries/notes_dict.py", "w") as nd:
+            new_notes_dict = notes_dict
+            new_notes_dict.update(note_dict)
+            nd.write(f"notes_dict = {notes_dict}")
+
+    #new note input
     new_note = Text(add_notes_frm, width= 100, height = 20)
     new_note.place(relx=0.7, rely=0.5, anchor=CENTER)
+    
 
+    #shows where to put title
     title_msg = ttk.Label(add_notes_frm, 
                          text="Title")
     title_msg.place(relx=0.4, rely= 0.3, anchor=CENTER)
 
+    #title input
     pick_title = ttk.Entry(add_notes_frm, width= 100)
     pick_title.place(relx=0.71, rely=0.3, anchor=CENTER)
 
 
 
-
+    #confirms note add
     add_btn = ttk.Button(add_notes_frm, 
-                         text="Add note")
+                         text="Add note",
+                          command=lambda : get_new_note(pick_title, new_note))
     add_btn.place(relx=0.5, rely= 0.7, anchor=CENTER)
 
 

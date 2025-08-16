@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import functions
+from dictionaries.notes_dict import notes_dict
 
 
 def to_notes(root, screen_manager, date=functions.today):

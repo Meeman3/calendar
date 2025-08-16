@@ -1,3 +1,0 @@
-daylist = {}
-
-notes = {}
