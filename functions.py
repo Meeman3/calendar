@@ -32,5 +32,14 @@ def get_text(text_box):
 
     return input_text
 
+#check if date is valid
+def date_checker(input):
+    try:
+        datetime.datetime.strptime(input, "%Y-%m-%d")
+        return True
+    except ValueError:
+        return False
+
+
 
 

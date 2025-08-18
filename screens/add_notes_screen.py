@@ -9,7 +9,7 @@ def add_notes(root, screen_manager):
     def get_new_note(title_text_box, note_text_box):
         note_title = functions.get_text(title_text_box)
         note_text = functions.get_text(note_text_box)
-        time = functions.today_time
+        time = str(functions.today_time)
         note_with_time = {note_text: time}
         note_dict = {note_title: note_with_time}
         with open("dictionaries/notes_dict.py", "w") as nd:
