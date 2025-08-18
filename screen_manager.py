@@ -4,6 +4,7 @@ from screens.notes_screen import to_notes
 from screens.add_to_checklist import add_list
 from screens.add_notes_screen import add_notes
 from screens.read_notes_screen import read_notes
+from dictionaries.notes_dict import notes_dict
 import functions
 
 class Screen_Manager:
@@ -36,12 +37,17 @@ class Screen_Manager:
     
         #goes back to previous screen and removes current from history
     def go_back(self, current_frame):
+        if self.screen_hist[-2][0] == "read_notes":
+            self.screen_hist.pop()
 
         self.screen_hist.pop()
         prev_screen = self.screen_hist[-1][0]
         prev_date = self.screen_hist[-1][1]
 
         self.change_screen(prev_screen, current_frame, back=True, date= prev_date)
+
+    def home_cmd(self):
+        self.change_screen("start", self.current_frame)
 
 
         

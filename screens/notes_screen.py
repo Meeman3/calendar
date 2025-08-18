@@ -10,6 +10,8 @@ def to_notes(root, screen_manager, date=functions.today):
     notes_frm = ttk.Frame(root, padding=10)
     notes_frm.pack(fill = "both", expand=True)
 
+    screen_manager.current_frame = notes_frm
+
     welcome_msg = ttk.Label(notes_frm, text="Welcome to notes")
     welcome_msg.place(relx=0.5, rely=0.25, anchor=CENTER) #centres in frm
 

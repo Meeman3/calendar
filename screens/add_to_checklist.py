@@ -7,6 +7,8 @@ def add_list(root, screen_manager):
     add_list_frm = ttk.Frame(root, padding=10)
     add_list_frm.pack(fill = "both", expand=True)
 
+    screen_manager.current_frame = add_list_frm 
+
 
     add_list_msg = ttk.Label(add_list_frm, text="What would you like to add to the list?")
     add_list_msg.place(relx=0.5, rely=0.25, anchor=CENTER) #centres in frm
@@ -49,9 +51,6 @@ def add_list(root, screen_manager):
     add_btn = ttk.Button(add_list_frm, 
                          text="Add check")
     add_btn.place(relx=0.5, rely= 0.6, anchor=CENTER)
-
-
-
 
     back_btn = ttk.Button(add_list_frm, text="Back", command=lambda: screen_manager.go_back(add_list_frm))
     back_btn.place(relx=0.9, rely=0.9)

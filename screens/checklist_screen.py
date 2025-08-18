@@ -13,6 +13,8 @@ def to_daylist(root, screen_manager, date=functions.today):
     daylist_frm = ttk.Frame(root, padding=10)
     daylist_frm.pack(fill = "both", expand=True)
 
+    screen_manager.current_frame = daylist_frm
+
     
     welcome_msg = ttk.Label(daylist_frm,
                              text=f"Welcome to your daily checklist\nCurrent date: {date}\n{day}")

@@ -11,6 +11,8 @@ def start_screen(root, screen_manager, date=functions.today):
     start_frm = ttk.Frame(root, padding=10)
     start_frm.pack(fill = "both", expand=True) # packs frm to fill full window
 
+    screen_manager.current_frame = start_frm
+
     #specifies layout of label in window
     welcome_msg = ttk.Label(start_frm, text="        Welcome to notes\n\nWhat do you want to access?")
     welcome_msg.place(relx=0.5, rely=0.25, anchor=CENTER) #centres in frm
