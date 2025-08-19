@@ -22,7 +22,7 @@ def to_daylist(root, screen_manager, date=functions.today):
             invalid_date_msg = ttk.Label(daylist_frm, text="Please input a valid date of form YYYY-MM-DD")
             invalid_date_msg.place(relx=0.22, rely=0.27, anchor=CENTER) #centres in frm
             return
-        date = datetime.datetime.strptime(check_date, "%Y-%m-%d")
+        date = datetime.datetime.strptime(check_date, "%Y-%m-%d").date()
         screen_manager.change_screen("checklist", daylist_frm, date = date)
             
 

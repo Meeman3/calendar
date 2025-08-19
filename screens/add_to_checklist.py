@@ -56,8 +56,7 @@ def add_list(root, screen_manager):
 
     def add_new_check(date_text_box, input_check_box ="", repeat = "single"):
         check_date = valid_date(date_text_box)
-        check_info = valid_check(input_check_box) 
-        daylist_update(check_date, repeat, check_info)
+        check_info = valid_check(input_check_box)
 
         if check_date == "bad date":
             invalid_date_msg = ttk.Label(add_list_frm, text="Please input a valid date of form YYYY-MM-DD")
@@ -70,6 +69,7 @@ def add_list(root, screen_manager):
             return
     
         else:
+            daylist_update(check_date, repeat, check_info)
             screen_manager.go_back(add_list_frm)
 
 
