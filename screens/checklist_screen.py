@@ -3,7 +3,8 @@ from tkinter import ttk
 from tkinter import scrolledtext
 import functions
 from dictionaries.checklist_dict import daylist_dict
-from screens.add_to_checklist import daylist_update
+from screens.add_to_checklist import daylist_update, valid_date
+import datetime
 
 
 def to_daylist(root, screen_manager, date=functions.today):
@@ -13,6 +14,16 @@ def to_daylist(root, screen_manager, date=functions.today):
             daylist_update(date, repeat, entry, True)
         else:
             daylist_update(date, repeat, entry, False)
+        
+
+    def goto_date(date_text_box):
+        check_date = valid_date(date_text_box)
+        if check_date == "bad date":
+            invalid_date_msg = ttk.Label(daylist_frm, text="Please input a valid date of form YYYY-MM-DD")
+            invalid_date_msg.place(relx=0.22, rely=0.27, anchor=CENTER) #centres in frm
+            return
+        date = datetime.datetime.strptime(check_date, "%Y-%m-%d")
+        screen_manager.change_screen("checklist", daylist_frm, date = date)
             
 
     day = functions.day(date)
@@ -64,6 +75,23 @@ def to_daylist(root, screen_manager, date=functions.today):
                                  )
             today_list_btn.place(relx=0.2, rely=0.5)
 
+    #back button
+    back_btn = ttk.Button(daylist_frm, text="Back", command=lambda:  screen_manager.go_back(daylist_frm))
+    back_btn.place(relx=0.9, rely=0.9)
+
+    #go to date
+    goto_date_label = ttk.Label(daylist_frm, text= "Change to a different date?")
+    goto_date_label.place(relx=0.2, rely=0.26)
+
+    goto_date_entry = ttk.Entry(daylist_frm,
+                                 width=20)
+    goto_date_entry.place(relx=0.2, rely=0.28)
+
+    goto_date_btn = ttk.Button(daylist_frm,
+                                text="Change date",
+                                 command= lambda: goto_date(goto_date_entry))
+    goto_date_btn.place(relx=0.2, rely=0.3)
+
     checklist_date = daylist_dict[str(date)]
 
         
@@ -75,11 +103,9 @@ def to_daylist(root, screen_manager, date=functions.today):
         checklist_area_frm.pack(fill = "both", expand=True)
 
         for repeat in checklist_date.keys():
-            print(f"Processing repeat type: {repeat}")
             
             daily_repeats = checklist_date[repeat]
             for entry in daily_repeats.keys():
-                print(f"Creating checkbox for: {entry}")
                 var = IntVar()
                 if daily_repeats[entry] == True:
                     var.set(1)
@@ -96,7 +122,3 @@ def to_daylist(root, screen_manager, date=functions.today):
                 check_button.pack(side=TOP, anchor="w")
 
         
-
-    #back button
-    back_btn = ttk.Button(daylist_frm, text="Back", command=lambda:  screen_manager.go_back(daylist_frm))
-    back_btn.place(relx=0.9, rely=0.9)
