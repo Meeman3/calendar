@@ -9,7 +9,7 @@ import datetime
 
 def to_daylist(root, screen_manager, date=functions.today):
 
-    def checkbutton_value(date, repeat, entry):
+    def checkbutton_value(date, repeat, entry, var):
         if var.get() == 1:
             daylist_update(date, repeat, entry, True)
         else:
@@ -22,8 +22,8 @@ def to_daylist(root, screen_manager, date=functions.today):
             invalid_date_msg = ttk.Label(daylist_frm, text="Please input a valid date of form YYYY-MM-DD")
             invalid_date_msg.place(relx=0.22, rely=0.27, anchor=CENTER) #centres in frm
             return
-        date = datetime.datetime.strptime(check_date, "%Y-%m-%d").date()
-        screen_manager.change_screen("checklist", daylist_frm, date = date)
+        go_date = datetime.datetime.strptime(check_date, "%Y-%m-%d").date()
+        screen_manager.change_screen("checklist", daylist_frm, date = go_date)
             
 
     day = functions.day(date)
@@ -102,6 +102,7 @@ def to_daylist(root, screen_manager, date=functions.today):
         checklist_area_frm = Frame(checklist_area)
         checklist_area_frm.pack(fill = "both", expand=True)
 
+
         for repeat in checklist_date.keys():
             
             daily_repeats = checklist_date[repeat]
@@ -117,8 +118,8 @@ def to_daylist(root, screen_manager, date=functions.today):
                                              variable=var,
                                              onvalue=1,
                                              offvalue=0,
-                                             command= lambda r=repeat, e=entry: 
-                                             checkbutton_value(date, r, e))
+                                             command= lambda d=date, r=repeat, e=entry, v=var: 
+                                             checkbutton_value(d, r, e, v))
                 check_button.pack(side=TOP, anchor="w")
 
         
