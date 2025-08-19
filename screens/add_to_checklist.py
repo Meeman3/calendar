@@ -4,6 +4,23 @@ import functions
 from dictionaries.checklist_dict import daylist_dict
 
 
+def daylist_update(date, repeat, entry, bool = False):
+        with open("dictionaries/checklist_dict.py", "w") as dl:
+            if str(date) in daylist_dict.keys():
+                date_dict = daylist_dict[str(date)]
+                if repeat in date_dict.keys():
+                    repeat_dict = date_dict[repeat]
+                    repeat_dict.update({entry: bool})
+                else:
+                    date_dict.update({repeat: {entry: bool}})
+            else:
+                date_dict = {repeat: {entry: bool}}
+
+            
+            daylist_dict.update({str(date): date_dict})
+            dl.write(f"daylist_dict= {daylist_dict}")
+
+
 def add_list(root, screen_manager):
 
     def get_new_check(date_text_box, input_check_box, repeat = "single"):
@@ -32,13 +49,7 @@ def add_list(root, screen_manager):
         if check_info == "":
             return "no check"
         
-        check_bool = False
-        check_info_dict = {check_info: check_bool}
-        check_repeat_dict = {repeat: check_info_dict}
-        check_full_dict = {check_date: check_repeat_dict} 
-        with open("dictionaries/checklist_dict.py", "w") as dl:
-            daylist_dict.update(check_full_dict)
-            dl.write(f"daylist_dict= {daylist_dict}")
+        daylist_update(check_date, repeat, check_info)
 
     def add_new_check(date_text_box, input_check_box ="", repeat = "single"):
         get_new_check(date_text_box, input_check_box, repeat)
