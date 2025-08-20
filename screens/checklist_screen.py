@@ -7,7 +7,12 @@ from screens.add_to_checklist import daylist_update, valid_date
 import datetime
 
 
-def to_daylist(root, screen_manager, date=functions.today):
+def to_daylist(root, screen_manager, date=functions.today, edit_mode = False):
+
+    def toggle_edit_list():
+        nonlocal toggle_edit
+        toggle_edit = not toggle_edit
+        screen_manager.change_screen("checklist", daylist_frm, date=date, edit_mode=toggle_edit)
 
     def checkbutton_value(date, repeat, entry, var):
         if var.get() == 1:
@@ -24,7 +29,20 @@ def to_daylist(root, screen_manager, date=functions.today):
             return
         go_date = datetime.datetime.strptime(check_date, "%Y-%m-%d").date()
         screen_manager.change_screen("checklist", daylist_frm, date = go_date)
-            
+
+    def delete_check(repeat, entry, amount= "single"):
+        del daylist_dict[str(date)][repeat][entry]
+        if not daylist_dict[str(date)][repeat]:
+            del daylist_dict[str(date)][repeat]
+            if not daylist_dict[str(date)]:
+                del daylist_dict[str(date)]
+
+        with open("dictionaries/checklist_dict.py", "w") as cd:
+            cd.write(f"daylist_dict ={daylist_dict}")
+
+        screen_manager.change_screen("checklist", daylist_frm, date = date)
+    
+    toggle_edit = edit_mode
 
     day = functions.day(date)
     yesterday = functions.yesterday(date)
@@ -92,8 +110,18 @@ def to_daylist(root, screen_manager, date=functions.today):
                                  command= lambda: goto_date(goto_date_entry))
     goto_date_btn.place(relx=0.2, rely=0.3)
 
-    checklist_date = daylist_dict[str(date)]
+    edit_list_btn = ttk.Button(daylist_frm,
+                                text="update",
+                                 command=lambda: toggle_edit_list())
+    edit_list_btn.place(relx=0.8, rely=0.3)
 
+    
+
+    try:
+        checklist_date = daylist_dict[str(date)]
+    except:
+        goto_date_label = ttk.Label(daylist_frm, text= "This date's list is currently empty\n    consider adding to it!")
+        goto_date_label.place(relx=0.5, rely=0.4, anchor=CENTER)
         
     if checklist_date:
         checklist_area = scrolledtext.ScrolledText(daylist_frm,width = 100, height = 20)
@@ -107,19 +135,32 @@ def to_daylist(root, screen_manager, date=functions.today):
             
             daily_repeats = checklist_date[repeat]
             for entry in daily_repeats.keys():
+
+                entry_frm = Frame(checklist_area_frm)
+                entry_frm.pack(fill="x", pady=2)
+
                 var = IntVar()
                 if daily_repeats[entry] == True:
                     var.set(1)
                 else:
                     var.set(0)
                  
-                check_button = Checkbutton(checklist_area_frm,
+                check_button = Checkbutton(entry_frm,
                                             text=entry, 
                                              variable=var,
                                              onvalue=1,
                                              offvalue=0,
                                              command= lambda d=date, r=repeat, e=entry, v=var: 
                                              checkbutton_value(d, r, e, v))
-                check_button.pack(side=TOP, anchor="w")
+                check_button.pack(side=LEFT)
+
+                if toggle_edit == True:
+                    delete_btn = Button(entry_frm,
+                                          text = "X",
+                                           bg= "firebrick1",
+                                            command = lambda r = repeat, e = entry: delete_check(r, e))
+                    delete_btn.pack(side=RIGHT)
+
+
 
         

@@ -14,7 +14,7 @@ class Screen_Manager:
         self.screen_hist = [["start", functions.today]]
 
         #changes screen from one to another, adds former screen to history if not using back func
-    def change_screen(self, screen_name, current_frame=None, back=False, date=functions.today, title =""):
+    def change_screen(self, screen_name, current_frame=None, back=False, date=functions.today, title ="", edit_mode = False):
         if current_frame:
             if not back:
                 self.screen_hist.append([screen_name, date])
@@ -26,7 +26,7 @@ class Screen_Manager:
         if screen_name == "notes":
             to_notes(self.root, self)
         if screen_name == "checklist":
-            to_daylist(self.root, self, date)
+            to_daylist(self.root, self, date, edit_mode)
         if screen_name == "add_list":
             add_list(self.root, self)
         if screen_name == "add_notes":
