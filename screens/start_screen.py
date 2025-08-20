@@ -7,17 +7,18 @@ def start_screen(root, screen_manager, date=functions.today):
 
 
 
-    #creates frame inside window
+    #   creates frame inside window
     start_frm = ttk.Frame(root, padding=10)
-    start_frm.pack(fill = "both", expand=True) # packs frm to fill full window
+    start_frm.pack(fill = "both", expand=True)
 
+    #   needed for home functions
     screen_manager.current_frame = start_frm
 
-    #specifies layout of label in window
+    #   Welcome msg
     welcome_msg = ttk.Label(start_frm, text="        Welcome to notes\n\nWhat do you want to access?")
     welcome_msg.place(relx=0.5, rely=0.25, anchor=CENTER) #centres in frm
 
-    #specifies layout of button in frame, when pressed calls to_notes
+    #   buttons for notes and checklist
     notes_btn = ttk.Button(start_frm,
                             text="Notes",
                             command=lambda: screen_manager.change_screen("notes", start_frm))
@@ -28,6 +29,7 @@ def start_screen(root, screen_manager, date=functions.today):
                                 command=lambda: screen_manager.change_screen("checklist", start_frm))
     checklist_btn.place(relx=0.5, rely=0.5, anchor=CENTER)
 
+    #   if this is the first screen doent show back button (prevents error and makes it look better)
     if len(screen_manager.screen_hist) != 1:
 
         back_btn = ttk.Button(start_frm, text="Back", command= lambda: screen_manager.go_back(start_frm))

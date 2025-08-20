@@ -1,21 +1,40 @@
 from tkinter import *
 from tkinter import ttk
 import functions 
-from dictionaries.checklist_dict import daylist_dict
-from dictionaries.recurring_check_dict import recurring_check_dict
 from datetime import datetime
 
 
+#   if dict files dont exist make temp dicts
+try:
+    from dictionaries.checklist_dict import daylist_dict
+except ImportError:
+    daylist_dict = {}
+
+try:
+    from dictionaries.recurring_check_dict import recurring_check_dict
+except ImportError:
+    recurring_check_dict = {}
+
+
+#   function that updates the checklist with inputted entry
 def daylist_update(date, repeat, entry, bool = False, num_of_occurance = "none"):
+
+    #   makes sure date is the right format
     if isinstance(date, str):
         date = datetime.strptime(date, "%Y-%m-%d").date()
+
+    #   checks if input shouuld be recursive
     if repeat != "single":
 
         recursive_date = date
+
+        #   if no repeat number is specified, repeats indefinitely by adding to recurring dict
         if num_of_occurance == "none":
             add_to_recurring_dict(date, repeat, entry)
             write_recurring_check_dict()
 
+        
+        #   if repeat number specified, repeats specified amount of times
         else:
             for i in range(num_of_occurance + 1):
                 print(i)
@@ -30,11 +49,13 @@ def daylist_update(date, repeat, entry, bool = False, num_of_occurance = "none")
                 elif repeat == "yearly":
                     recursive_date = functions.next_year(recursive_date)
 
+    #   if no repeat just adds to current date
     else:
         update_daylist_dict(date, repeat, entry, bool)
 
     write_daylist_dict()
 
+#   function to add entries to the recurring dict
 def add_to_recurring_dict(date, repeat, entry):
     if repeat in recurring_check_dict.keys():
         repeat_date_dict = recurring_check_dict[repeat]
@@ -58,13 +79,13 @@ def add_to_recurring_dict(date, repeat, entry):
                                  }
                             }
                         
-        
+#   updates recurring dict file
 def write_recurring_check_dict():
     with open("dictionaries/recurring_check_dict.py", "w") as rcd:
         rcd.write(f"recurring_check_dict = {recurring_check_dict}")
                              
 
-
+#   function that adds entry to daylist dict
 def update_daylist_dict(date, repeat, entry, bool):
     if str(date) in daylist_dict.keys():
         date_dict = daylist_dict[str(date)]
@@ -79,18 +100,22 @@ def update_daylist_dict(date, repeat, entry, bool):
     
     daylist_dict.update({str(date): date_dict})
 
+#   updates daylist dict file
 def write_daylist_dict():
     with open("dictionaries/checklist_dict.py", "w") as dl:
         dl.write(f"daylist_dict= {daylist_dict}")
 
 
+#   function that checks if a date is valid YYYY-MM-DD format
 def valid_date(date_text_box, date):
+
+    #if date given uses that, if not uses current list date
     if functions.get_text(date_text_box) != "":
             check_date = functions.get_text(date_text_box)
     else:
         check_date = str(date)
     
-
+    
     try:
         input_date = check_date.split("-")
         input_year = input_date[0]
@@ -107,6 +132,7 @@ def valid_date(date_text_box, date):
     
     return check_date
 
+#   makes sure the added check isnt empty
 def valid_check(input_check_box):
     check_info = functions.get_text(input_check_box)
     if check_info == "":
@@ -115,23 +141,27 @@ def valid_check(input_check_box):
     return check_info
     
 
-
+#   function that creates the add_list screen
 def add_list(root, screen_manager, date):
 
+    #   function that adds new checks to daylist dict
     def add_new_check(date_text_box, input_check_box ="", repeat = "single"):
         check_date = valid_date(date_text_box, date)
         check_info = valid_check(input_check_box)
 
+        #   tells user if date is invalid
         if check_date == "bad date":
             invalid_date_msg = ttk.Label(add_list_frm, text="Please input a valid date of form YYYY-MM-DD")
             invalid_date_msg.place(relx=0.5, rely=0.25, anchor=CENTER) #centres in frm
             return
-
+        
+        #   tells user if entry is empty
         elif check_info == "no check":
             no_check_msg = ttk.Label(add_list_frm, text="No entry, please input a checklist entry")
             no_check_msg.place(relx=0.5, rely=0.25, anchor=CENTER) #centres in frm
             return
-    
+        
+        #   checks if entry should recur 
         else:
             recur_num = recur_amount.get().strip()
             if recur_num == "":
@@ -142,44 +172,44 @@ def add_list(root, screen_manager, date):
                 except ValueError:
                     num_of_occurance = "none"
             
-            print(f"{num_of_occurance}")
-
+            #   adds check to daylist and returns to checklist screen
             daylist_update(check_date, repeat, check_info, num_of_occurance = num_of_occurance)
             screen_manager.go_back(add_list_frm)
 
 
 
-
+    # creates frame
     add_list_frm = ttk.Frame(root, padding=10)
     add_list_frm.pack(fill = "both", expand=True)
 
+    #   tracks frame in screen manager, used for home function
     screen_manager.current_frame = add_list_frm 
 
 
-    #title ish
+    #   title ish
     add_list_msg = ttk.Label(add_list_frm, text="What would you like to add to the list?")
     add_list_msg.place(relx=0.5, rely=0.25, anchor=CENTER) #centres in frm
 
-    # shows where to input new check
+    #   shows where to input new check
     input_check = ttk.Label(add_list_frm, text="Input text here:")
     input_check.place(relx=0.4, rely=0.4, anchor=CENTER)
 
-    #place to input new check
+    #   place to input new check
     new_check = ttk.Entry(add_list_frm, width= 100)
     new_check.place(relx=0.7, rely=0.4, anchor=CENTER)
 
 
-    #shows where to input wanted date
+    #s  hows where to input wanted date
     date_msg = ttk.Label(add_list_frm, 
                          text="Date for checklist entry YYYY-MM-DD\n(leave blank for today)")
     date_msg.place(relx=0.4, rely= 0.3, anchor=CENTER)
 
-    #date input
+    #   date input
     pick_date = ttk.Entry(add_list_frm, width= 20)
     pick_date.place(relx=0.55, rely=0.3, anchor=CENTER)
 
 
-    #recursive buttons
+    #   recursive add buttons
     daily_repeat = ttk.Button(add_list_frm, 
                          text="Repeat daily",
                           command= lambda: add_new_check(pick_date, new_check, repeat="daily"))
@@ -201,7 +231,7 @@ def add_list(root, screen_manager, date):
     yearly_repeat.place(relx=0.65, rely= 0.5, anchor=CENTER)
 
     
-    #recur an amount of times input
+    #   recur an amount of times input
     recur_label = ttk.Label(add_list_frm,
                              text="How many times do you want to repeat?\n(blank = indefinite)")
     recur_label.place(relx=0.8, rely=0.47, anchor=CENTER)
@@ -210,11 +240,12 @@ def add_list(root, screen_manager, date):
                             width = 10)
     recur_amount.place(relx=0.8, rely=0.52, anchor=CENTER)
 
-    #button to confirm entry
+    #   button to confirm entry
     add_btn = ttk.Button(add_list_frm, 
                          text="Add check",
                           command= lambda: add_new_check(pick_date, new_check))
     add_btn.place(relx=0.5, rely= 0.6, anchor=CENTER)
+
 
     back_btn = ttk.Button(add_list_frm, text="Back", command=lambda: screen_manager.go_back(add_list_frm))
     back_btn.place(relx=0.9, rely=0.9)

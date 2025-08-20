@@ -2,30 +2,43 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import scrolledtext
 import functions
-from dictionaries.notes_dict import notes_dict
 
+#   if file doesnt exist makes temp dict
+try:
+    from dictionaries.notes_dict import notes_dict
+except ImportError:
+    notes_dict = {}
 
-def to_notes(root, screen_manager, date=functions.today):
+#    function that boots notes screen
+def to_notes(root, screen_manager):
 
+    #   makes frame
     notes_frm = ttk.Frame(root, padding=10)
     notes_frm.pack(fill = "both", expand=True)
 
+    #   needed for home button
     screen_manager.current_frame = notes_frm
 
+
+    #   labels
     welcome_msg = ttk.Label(notes_frm, text="Welcome to notes")
-    welcome_msg.place(relx=0.5, rely=0.25, anchor=CENTER) #centres in frm
+    welcome_msg.place(relx=0.5, rely=0.25, anchor=CENTER)
 
     welcome_msg = ttk.Label(notes_frm, text="Please choose an option:")
-    welcome_msg.place(relx=0.5, rely=0.35, anchor=CENTER) #centres in frm
+    welcome_msg.place(relx=0.5, rely=0.35, anchor=CENTER)
 
+    #   takes to previous page
     back_btn = ttk.Button(notes_frm, text="Back", command=lambda: screen_manager.go_back(notes_frm))
     back_btn.place(relx=0.9, rely=0.9)
 
+    #   takes to add_notes screen
     add_notes_btn = ttk.Button(notes_frm, 
                                  text="Add notes", 
                                  command=lambda:  screen_manager.change_screen("add_notes", notes_frm))
     add_notes_btn.place(relx=0.8, rely=0.5 )
 
+
+    #   if notes exist, puts scrollable buttons to access them
     if notes_dict:
         notes_area = scrolledtext.ScrolledText(notes_frm, width = 100, height = 20)
         notes_area.place(relx = 0.5, rely= 0.5, anchor=CENTER)

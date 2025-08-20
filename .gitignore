@@ -1,7 +1,10 @@
+#virtual environment
 .venv
 .python-version
-__pycache__
-/dictionaries
-checklist_dict.py
-notes_dict.py
-recurring_check_dict.py
+
+#Python cache
+__pycache__/
+*.pyc
+
+#User data
+dictionaries/

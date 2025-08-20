@@ -1,24 +1,24 @@
 from tkinter import *
-from tkinter import ttk
 import datetime
 from dateutil.relativedelta import relativedelta
 
-
+    #   date today
 today = datetime.date.today()
+
+    #   todays date AND time
 today_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-#function that gets current day of week
+    #   function that gets current day of week
 def day(date):
     days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
     return days_of_week[date.weekday()]
 
 
-#function that gets day after inputted date
+    #   functions that related date based on input date
 def tomorrow(today):
     return today + datetime.timedelta(days=1)
 
-#funcion that gets day before input date
 def yesterday(today):
     return today - datetime.timedelta(days=1)
 
@@ -32,7 +32,7 @@ def next_year(date):
     return date + relativedelta(years=1)
 
 
-#get text from text box
+    #   function that gets text from text boxes, Entry or Text
 def get_text(text_box):
     if isinstance(text_box, Entry):
         input_text = text_box.get()
@@ -42,7 +42,7 @@ def get_text(text_box):
 
     return input_text
 
-#check if date is valid
+    #   functionn that checks if date is valid
 def date_checker(input):
     try:
         datetime.datetime.strptime(input, "%Y-%m-%d")

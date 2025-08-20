@@ -4,23 +4,28 @@ from screens.notes_screen import to_notes
 from screens.add_to_checklist import add_list
 from screens.add_notes_screen import add_notes
 from screens.read_notes_screen import read_notes
-from dictionaries.notes_dict import notes_dict
 import functions
 
 class Screen_Manager:
     def __init__(self, root):
         self.root = root
+
+        #   tracking for back and home functions
         self.current_frame = None
         self.screen_hist = [["start", functions.today]]
 
         #changes screen from one to another, adds former screen to history if not using back func
     def change_screen(self, screen_name, current_frame=None, back=False, date=functions.today, title ="", edit_mode = False):
+        
+        #if going to new frame removes old frame
         if current_frame:
+            #   tracks screen hist unless back button used
             if not back:
                 self.screen_hist.append([screen_name, date])
             current_frame.pack_forget()
 
         
+        #   changee to these screens when called
         if screen_name == "start":
             start_screen(self.root, self)
         if screen_name == "notes":
@@ -35,17 +40,23 @@ class Screen_Manager:
             read_notes(self.root, self, title)
 
     
-        #goes back to previous screen and removes current from history
+    #   goes back to previous screen and removes current from history
     def go_back(self, current_frame):
+
+        #   makes it so if you go back from notes screen after editing a note you go to the home and not recieve an error
         if self.screen_hist[-2][0] == "read_notes":
             self.screen_hist.pop()
 
+        #   removes history so you dont get stuck in a back loop
         self.screen_hist.pop()
         prev_screen = self.screen_hist[-1][0]
         prev_date = self.screen_hist[-1][1]
 
+        #   goes to previous screen
         self.change_screen(prev_screen, current_frame, back=True, date= prev_date)
 
+
+    #   takes to main page
     def home_cmd(self):
         self.change_screen("start", self.current_frame)
 
