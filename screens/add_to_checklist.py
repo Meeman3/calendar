@@ -3,19 +3,22 @@ from tkinter import ttk
 import functions 
 from dictionaries.checklist_dict import daylist_dict
 from dictionaries.recurring_check_dict import recurring_check_dict
+from datetime import datetime
 
 
 def daylist_update(date, repeat, entry, bool = False, num_of_occurance = "none"):
+    if isinstance(date, str):
+        date = datetime.strptime(date, "%Y-%m-%d").date()
     if repeat != "single":
 
         recursive_date = date
         if num_of_occurance == "none":
             add_to_recurring_dict(date, repeat, entry)
             write_recurring_check_dict()
-            return
 
         else:
-            for i in range(num_of_occurance):
+            for i in range(num_of_occurance + 1):
+                print(i)
                 update_daylist_dict(recursive_date, repeat, entry, bool)
 
                 if repeat == "daily":
@@ -130,7 +133,18 @@ def add_list(root, screen_manager, date):
             return
     
         else:
-            daylist_update(check_date, repeat, check_info)
+            recur_num = recur_amount.get().strip()
+            if recur_num == "":
+                num_of_occurance = "none"
+            else:
+                try:
+                    num_of_occurance = int(recur_num)
+                except ValueError:
+                    num_of_occurance = "none"
+            
+            print(f"{num_of_occurance}")
+
+            daylist_update(check_date, repeat, check_info, num_of_occurance = num_of_occurance)
             screen_manager.go_back(add_list_frm)
 
 
@@ -165,7 +179,7 @@ def add_list(root, screen_manager, date):
     pick_date.place(relx=0.55, rely=0.3, anchor=CENTER)
 
 
-    #unfinished buttons
+    #recursive buttons
     daily_repeat = ttk.Button(add_list_frm, 
                          text="Repeat daily",
                           command= lambda: add_new_check(pick_date, new_check, repeat="daily"))
@@ -186,6 +200,15 @@ def add_list(root, screen_manager, date):
                           command= lambda: add_new_check(pick_date, new_check, repeat="yearly"))
     yearly_repeat.place(relx=0.65, rely= 0.5, anchor=CENTER)
 
+    
+    #recur an amount of times input
+    recur_label = ttk.Label(add_list_frm,
+                             text="How many times do you want to repeat?\n(blank = indefinite)")
+    recur_label.place(relx=0.8, rely=0.47, anchor=CENTER)
+
+    recur_amount = ttk.Entry(add_list_frm,
+                            width = 10)
+    recur_amount.place(relx=0.8, rely=0.52, anchor=CENTER)
 
     #button to confirm entry
     add_btn = ttk.Button(add_list_frm, 

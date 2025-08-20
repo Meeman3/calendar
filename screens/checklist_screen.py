@@ -3,8 +3,10 @@ from tkinter import ttk
 from tkinter import scrolledtext
 import functions
 from dictionaries.checklist_dict import daylist_dict
-from screens.add_to_checklist import daylist_update, valid_date
+from dictionaries.recurring_check_dict import recurring_check_dict
+from screens.add_to_checklist import daylist_update, valid_date, update_daylist_dict, write_daylist_dict
 import datetime
+from dateutil.relativedelta import relativedelta
 
 
 def to_daylist(root, screen_manager, date=functions.today, edit_mode = False):
@@ -41,6 +43,33 @@ def to_daylist(root, screen_manager, date=functions.today, edit_mode = False):
             cd.write(f"daylist_dict ={daylist_dict}")
             
         screen_manager.change_screen("checklist", daylist_frm, date = date)
+
+    def recurring_date_checker(input_date, entry_date, repeat):
+        if isinstance(entry_date, str):
+            entry_date = datetime.datetime.strptime(entry_date, "%Y-%m-%d").date()
+
+        date_diff = relativedelta(input_date, entry_date)
+        if repeat == "daily":
+            return True
+        elif repeat == "weekly":
+            week_diff = input_date - entry_date
+            return week_diff.days >= 0 and week_diff.days % 7 == 0
+        elif repeat == "monthly":
+            return date_diff.days == 0 and date_diff.months >= 0 and date_diff.years >= 0
+        elif repeat == "yearly":
+            return date_diff.days == 0 and date_diff.months == 0 and date_diff.years >= 0
+
+
+    def generate_recurring_entries(date):
+        for repeat, entry_dict in recurring_check_dict.items():
+            for entry, info_dict in entry_dict.items():
+                entry_date = info_dict["start_date"]
+
+                if recurring_date_checker(date, entry_date, repeat):
+                    update_daylist_dict(date, repeat, entry, False)
+                    write_daylist_dict()
+    
+    generate_recurring_entries(date)
     
     toggle_edit = edit_mode
 
@@ -158,14 +187,14 @@ def to_daylist(root, screen_manager, date=functions.today, edit_mode = False):
                     if repeat != "single":
                         delete_recursive_btn = Button(entry_frm,
                                           text = "DEL REPEATS",
-                                           bg= "red4",
+                                           activebackground= "red4",
                                             command = lambda r = repeat, e = entry: delete_check(r, e, amount="all"))
                         delete_recursive_btn.pack(side=RIGHT)
 
 
                     delete_btn = Button(entry_frm,
                                           text = "X",
-                                           bg= "firebrick2",
+                                           activebackground= "firebrick2",
                                             command = lambda r = repeat, e = entry: delete_check(r, e))
                     delete_btn.pack(side=RIGHT)
 

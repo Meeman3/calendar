@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import datetime
-import dateutil
+from dateutil.relativedelta import relativedelta
 
 
 today = datetime.date.today()
@@ -26,10 +26,10 @@ def next_week(date):
     return date + datetime.timedelta(weeks=1)
 
 def next_month(date):
-    return date + dateutil.relativedelta(months=1)
+    return date + relativedelta(months=1)
 
 def next_year(date):
-    return date + dateutil.relativedelta(years=1)
+    return date + relativedelta(years=1)
 
 
 #get text from text box
