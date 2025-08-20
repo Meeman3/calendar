@@ -106,19 +106,23 @@ def add_list(root, screen_manager):
 
     #unfinished buttons
     daily_repeat = ttk.Button(add_list_frm, 
-                         text="Repeat daily")
+                         text="Repeat daily",
+                          command= lambda: add_new_check(pick_date, new_check, repeat="daily"))
     daily_repeat.place(relx=0.35, rely= 0.5, anchor=CENTER)
 
     weekly_repeat = ttk.Button(add_list_frm, 
-                         text="Repeat weekly")
+                         text="Repeat weekly",
+                          command= lambda: add_new_check(pick_date, new_check, repeat="weekly"))
     weekly_repeat.place(relx=0.45, rely= 0.5, anchor=CENTER)
 
     monthly_repeat = ttk.Button(add_list_frm, 
-                         text="Repeat monthly")
+                         text="Repeat monthly",
+                          command= lambda: add_new_check(pick_date, new_check, repeat="monthly"))
     monthly_repeat.place(relx=0.55, rely= 0.5, anchor=CENTER)
 
     yearly_repeat = ttk.Button(add_list_frm, 
-                         text="Repeat yearly")
+                         text="Repeat yearly",
+                          command= lambda: add_new_check(pick_date, new_check, repeat="yearly"))
     yearly_repeat.place(relx=0.65, rely= 0.5, anchor=CENTER)
 
 

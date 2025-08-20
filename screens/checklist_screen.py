@@ -12,7 +12,7 @@ def to_daylist(root, screen_manager, date=functions.today, edit_mode = False):
     def toggle_edit_list():
         nonlocal toggle_edit
         toggle_edit = not toggle_edit
-        screen_manager.change_screen("checklist", daylist_frm, date=date, edit_mode=toggle_edit)
+        screen_manager.change_screen("checklist", daylist_frm, date=date, edit_mode=toggle_edit, back=True)
 
     def checkbutton_value(date, repeat, entry, var):
         if var.get() == 1:
@@ -39,7 +39,7 @@ def to_daylist(root, screen_manager, date=functions.today, edit_mode = False):
 
         with open("dictionaries/checklist_dict.py", "w") as cd:
             cd.write(f"daylist_dict ={daylist_dict}")
-
+            
         screen_manager.change_screen("checklist", daylist_frm, date = date)
     
     toggle_edit = edit_mode
@@ -111,7 +111,7 @@ def to_daylist(root, screen_manager, date=functions.today, edit_mode = False):
     goto_date_btn.place(relx=0.2, rely=0.3)
 
     edit_list_btn = ttk.Button(daylist_frm,
-                                text="update",
+                                text="Delete check",
                                  command=lambda: toggle_edit_list())
     edit_list_btn.place(relx=0.8, rely=0.3)
 
@@ -155,11 +155,20 @@ def to_daylist(root, screen_manager, date=functions.today, edit_mode = False):
                 check_button.pack(side=LEFT)
 
                 if toggle_edit == True:
+                    if repeat != "single":
+                        delete_recursive_btn = Button(entry_frm,
+                                          text = "DEL REPEATS",
+                                           bg= "red4",
+                                            command = lambda r = repeat, e = entry: delete_check(r, e))
+                        delete_recursive_btn.pack(side=RIGHT)
+
+
                     delete_btn = Button(entry_frm,
                                           text = "X",
-                                           bg= "firebrick1",
+                                           bg= "firebrick2",
                                             command = lambda r = repeat, e = entry: delete_check(r, e))
                     delete_btn.pack(side=RIGHT)
+
 
 
 
