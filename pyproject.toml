@@ -1,5 +1,5 @@
 [project]
-name = "notes-app"
+name = "daily_organiser"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
