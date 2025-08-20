@@ -1,6 +1,7 @@
 .venv
 .python-version
 __pycache__
-
+/dictionaries
 checklist_dict.py
 notes_dict.py
+reccuring_check_dict.py
