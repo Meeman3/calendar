@@ -10,10 +10,12 @@ def daylist_update(date, repeat, entry, bool = False, num_of_occurance = "none")
 
         recursive_date = date
         if num_of_occurance == "none":
-            add_to_recurring_dict(date, repeat, entry, bool)
+            add_to_recurring_dict(date, repeat, entry)
+            write_recurring_check_dict()
+            return
 
         else:
-            for i in range( num_of_occurance):
+            for i in range(num_of_occurance):
                 update_daylist_dict(recursive_date, repeat, entry, bool)
 
                 if repeat == "daily":
@@ -30,8 +32,34 @@ def daylist_update(date, repeat, entry, bool = False, num_of_occurance = "none")
 
     write_daylist_dict()
 
-def add_to_recurring_dict(date, repeat, entry, bool = False):
-    if
+def add_to_recurring_dict(date, repeat, entry):
+    if repeat in recurring_check_dict.keys():
+        repeat_date_dict = recurring_check_dict[repeat]
+        if entry in repeat_date_dict.keys():
+            entry_dict = repeat_date_dict[entry]
+            entry_dict.update({"start_date": date,
+                                 "active": True})
+        else:
+            repeat_date_dict.update({entry: 
+                             {"start_date": date,
+                                 "active": True
+                                 }
+                            }
+                        )
+
+
+    else:
+        recurring_check_dict[repeat] = {entry: 
+                             {"start_date": date,
+                                 "active": True
+                                 }
+                            }
+                        
+        
+def write_recurring_check_dict():
+    with open("dictionaries/recurring_check_dict.py", "w") as rcd:
+        rcd.write(f"recurring_check_dict = {recurring_check_dict}")
+                             
 
 
 def update_daylist_dict(date, repeat, entry, bool):

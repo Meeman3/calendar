@@ -1,1 +1,1 @@
-recurring_check_dict ={}
+recurring_check_dict = {}
