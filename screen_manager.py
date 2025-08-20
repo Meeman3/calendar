@@ -28,7 +28,7 @@ class Screen_Manager:
         if screen_name == "checklist":
             to_daylist(self.root, self, date, edit_mode)
         if screen_name == "add_list":
-            add_list(self.root, self)
+            add_list(self.root, self, date)
         if screen_name == "add_notes":
             add_notes(self.root, self)
         if screen_name == "read_notes":

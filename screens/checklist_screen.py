@@ -22,7 +22,7 @@ def to_daylist(root, screen_manager, date=functions.today, edit_mode = False):
         
 
     def goto_date(date_text_box):
-        check_date = valid_date(date_text_box)
+        check_date = valid_date(date_text_box, date)
         if check_date == "bad date":
             invalid_date_msg = ttk.Label(daylist_frm, text="Please input a valid date of form YYYY-MM-DD")
             invalid_date_msg.place(relx=0.22, rely=0.27, anchor=CENTER) #centres in frm
@@ -62,7 +62,7 @@ def to_daylist(root, screen_manager, date=functions.today, edit_mode = False):
     #button that takes you to add list screen
     add_to_list_btn = ttk.Button(daylist_frm, 
                                  text="Update list", 
-                                 command=lambda:  screen_manager.change_screen("add_list", daylist_frm))
+                                 command=lambda:  screen_manager.change_screen("add_list", daylist_frm, date=date))
     add_to_list_btn.place(relx=0.8, rely=0.5 )
 
     #button that takes you to yesterdays list
@@ -159,7 +159,7 @@ def to_daylist(root, screen_manager, date=functions.today, edit_mode = False):
                         delete_recursive_btn = Button(entry_frm,
                                           text = "DEL REPEATS",
                                            bg= "red4",
-                                            command = lambda r = repeat, e = entry: delete_check(r, e))
+                                            command = lambda r = repeat, e = entry: delete_check(r, e, amount="all"))
                         delete_recursive_btn.pack(side=RIGHT)
 
 

@@ -2,29 +2,62 @@ from tkinter import *
 from tkinter import ttk
 import functions 
 from dictionaries.checklist_dict import daylist_dict
+from dictionaries.recurring_check_dict import recurring_check_dict
 
 
-def daylist_update(date, repeat, entry, bool = False):
-        with open("dictionaries/checklist_dict.py", "w") as dl:
-            if str(date) in daylist_dict.keys():
-                date_dict = daylist_dict[str(date)]
-                if repeat in date_dict.keys():
-                    repeat_dict = date_dict[repeat]
-                    repeat_dict.update({entry: bool})
-                else:
-                    date_dict.update({repeat: {entry: bool}})
-            else:
-                date_dict = {repeat: {entry: bool}}
+def daylist_update(date, repeat, entry, bool = False, num_of_occurance = "none"):
+    if repeat != "single":
 
-            
-            daylist_dict.update({str(date): date_dict})
-            dl.write(f"daylist_dict= {daylist_dict}")
+        recursive_date = date
+        if num_of_occurance == "none":
+            add_to_recurring_dict(date, repeat, entry, bool)
 
-def valid_date(date_text_box):
+        else:
+            for i in range( num_of_occurance):
+                update_daylist_dict(recursive_date, repeat, entry, bool)
+
+                if repeat == "daily":
+                    recursive_date = functions.tomorrow(recursive_date)
+                elif repeat == "weekly":
+                    recursive_date = functions.next_week(recursive_date)
+                elif repeat == "monthly":
+                    recursive_date = functions.next_month(recursive_date)
+                elif repeat == "yearly":
+                    recursive_date = functions.next_year(recursive_date)
+
+    else:
+        update_daylist_dict(date, repeat, entry, bool)
+
+    write_daylist_dict()
+
+def add_to_recurring_dict(date, repeat, entry, bool = False):
+    if
+
+
+def update_daylist_dict(date, repeat, entry, bool):
+    if str(date) in daylist_dict.keys():
+        date_dict = daylist_dict[str(date)]
+        if repeat in date_dict.keys():
+            repeat_dict = date_dict[repeat]
+            repeat_dict.update({entry: bool})
+        else:
+            date_dict.update({repeat: {entry: bool}})
+    else:
+        date_dict = {repeat: {entry: bool}}
+
+    
+    daylist_dict.update({str(date): date_dict})
+
+def write_daylist_dict():
+    with open("dictionaries/checklist_dict.py", "w") as dl:
+        dl.write(f"daylist_dict= {daylist_dict}")
+
+
+def valid_date(date_text_box, date):
     if functions.get_text(date_text_box) != "":
             check_date = functions.get_text(date_text_box)
     else:
-        check_date = str(functions.today)
+        check_date = str(date)
     
 
     try:
@@ -52,10 +85,10 @@ def valid_check(input_check_box):
     
 
 
-def add_list(root, screen_manager):
+def add_list(root, screen_manager, date):
 
     def add_new_check(date_text_box, input_check_box ="", repeat = "single"):
-        check_date = valid_date(date_text_box)
+        check_date = valid_date(date_text_box, date)
         check_info = valid_check(input_check_box)
 
         if check_date == "bad date":
