@@ -22,7 +22,6 @@ def to_daylist(root, screen_manager, date=functions.today, edit_mode = False):
         else:
             daylist_update(date, repeat, entry, False)
         
-
     def goto_date(date_text_box):
         check_date = valid_date(date_text_box, date)
         if check_date == "bad date":
@@ -33,11 +32,29 @@ def to_daylist(root, screen_manager, date=functions.today, edit_mode = False):
         screen_manager.change_screen("checklist", daylist_frm, date = go_date)
 
     def delete_check(repeat, entry, amount= "single"):
-        del daylist_dict[str(date)][repeat][entry]
-        if not daylist_dict[str(date)][repeat]:
-            del daylist_dict[str(date)][repeat]
-            if not daylist_dict[str(date)]:
-                del daylist_dict[str(date)]
+        if amount == "single":
+            del daylist_dict[str(date)][repeat][entry]
+            if not daylist_dict[str(date)][repeat]:
+                del daylist_dict[str(date)][repeat]
+                if not daylist_dict[str(date)]:
+                    del daylist_dict[str(date)]
+
+        elif amount == "all":
+            if repeat in recurring_check_dict and entry in recurring_check_dict[repeat]:
+                del recurring_check_dict[repeat][entry]
+            
+            for date_ in list(daylist_dict.keys()):
+                if repeat in daylist_dict[date_]:
+                    if entry in daylist_dict[date_][repeat]:
+                        del daylist_dict[date_][repeat][entry]
+
+                        if not daylist_dict[date_][repeat]:
+                            del daylist_dict[date_][repeat]
+                            if not daylist_dict[date_]:
+                                del daylist_dict[date_]
+
+        with open("dictionaries/recurring_check_dict.py", "w") as rcd:
+            rcd.write(f"recurring_check_dict = {recurring_check_dict}")
 
         with open("dictionaries/checklist_dict.py", "w") as cd:
             cd.write(f"daylist_dict ={daylist_dict}")
@@ -68,6 +85,7 @@ def to_daylist(root, screen_manager, date=functions.today, edit_mode = False):
                 if recurring_date_checker(date, entry_date, repeat):
                     update_daylist_dict(date, repeat, entry, False)
                     write_daylist_dict()
+
     
     generate_recurring_entries(date)
     
